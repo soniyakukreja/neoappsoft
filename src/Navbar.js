@@ -22,14 +22,14 @@ function Navbar(props) {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-  <Link to="/"> <a className="navbar-brand">My cakeshop</a></Link>
+    <nav className="navbar navbar-expand-lg navbar-light " style={{backgroundColor:"#043d76"}}>
+  <Link to="/"> <a className="navbar-brand title text-light"><b>My cakeshop</b></a></Link>
   <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span className="navbar-toggler-icon"></span>
   </button>
 
   <div className="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul className="navbar-nav mr-auto">
+    <ul className="navbar-nav mr-auto  text-light">
      {/* <li>{props.children}   Hello {props.user}</li> */}
      {props.user  &&  <li>Welcome {props.user}</li> }
      
@@ -39,17 +39,17 @@ function Navbar(props) {
       {/* <Link to={"/search/"+searchkey}> <button className="btn btn-outline-success my-2 my-sm-0" type="button">Search</button></Link> */}
    
    {/* with query string */}
-    <Link to={`/search?q=${searchkey}`}><button className="btn btn-success my-2 my-sm-0" type="button"><FontAwesomeIcon icon={faSearch} /></button></Link>
+    <Link to={`/search?q=${searchkey}`}><button className="btn my-2 my-sm-0 text-light" style={{backgroundColor:"#1e77d07a"}} type="button"><FontAwesomeIcon icon={faSearch} /></button></Link>
     </form>
     <div>
        {
          props.loginstatus ? 
          <div>
-         <Link to="/cart" className="btn btn-warning m-2 my-sm-0 mr-2"><FontAwesomeIcon icon={faShoppingCart} />{props.cart_data_length>0?props.cart_data_length:''}</Link>
+         <Link to="/cart" className="btn m-2 my-sm-0 mr-2 text-light" style={{backgroundColor:"#1e77d07a"}} ><FontAwesomeIcon icon={faShoppingCart} /><b className="pl-1">{props.cart_data_length>0?props.cart_data_length:''}</b></Link>
 
          <button onClick={logout} className="btn btn-danger  m-2">Logout</button>
          </div>
-         : <Link to="/login"> <button className="btn btn-success m-2">Login</button></Link>
+         : <Link to="/login"> <button className="btn text-light m-2" style={{backgroundColor:"#1e77d07a"}}>Login</button></Link>
         }
     </div>
   </div>

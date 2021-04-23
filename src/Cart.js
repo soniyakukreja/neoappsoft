@@ -20,7 +20,6 @@ function Cart(props){
                 authtoken: localStorage.token
             }
         }).then((response)=>{
-            console.log("removecart response : ",response)
             if(response.data){
                 props.dispatch({
                     type:"REMOVE_CART_DATA",
@@ -45,8 +44,7 @@ function Cart(props){
                 <div className="col-m-12">
                     <div className="col-m-8">
                     {props.cartDetails?.length >0 && props.cartDetails.map((each,index) => {
-                        // console.log('each',each);
-                        // console.log('eachimage',each.image)
+
                         TotalPrice += each.price
                         Count += 1
 
@@ -65,7 +63,7 @@ function Cart(props){
                                     {each.price}
                                 </div>
                                 <div className="col-sm-2">
-                                    <button className="btn btn-warning my-2 my-sm-0" onClick={() => removefromCart(each.cakeid, index)}  > Remove</button>
+                                    <button className="btn btn-danger my-2 my-sm-0" onClick={() => removefromCart(each.cakeid, index)}  > Remove</button>
                                 </div>
 
                             </div>

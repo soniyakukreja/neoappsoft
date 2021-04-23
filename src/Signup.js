@@ -88,7 +88,7 @@ class Signup extends Component
                 <div style={{color:"red"}}>
                     {this.state.errorMessage}
                 </div>
-              <button className="btn btn-primary" onClick={this.register}>Register</button>
+              <button className="btn text-light form-control" style={{backgroundColor:"#043d76"}} onClick={this.register}>Register</button>
             </div>
 		)
 	}

@@ -1,37 +1,90 @@
 import {connect} from "react-redux"
-import {Link,withRouter } from "react-router-dom"
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-//import Cake from './Cake'
+import { useRouteMatch, Link, withRouter } from "react-router-dom"
 import axios from "axios"
-//import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from "react";
+import $ from 'jquery';
 
 function CartSummary(props){
 
-    console.log('summary props',props)
+    var [current_check_step,setCurrentCheckStep] = useState(1)
+    //console.log('summary props',props)
     var [check_stage,setCheck_stage] = useState(1)
 
-    console.log('check_stage',check_stage)
-
+    //console.log('check_stage',check_stage)
+    var route =  useRouteMatch()
+    var url = route.url
+    var path = route.path
     var TotalPrice = 0
     var Count = 0
 
     let confirm_summary = (e)=>{
         setCheck_stage(2)
-        console.log('after check_stage',check_stage)
-        // props.dispatch({
-        //     type: "CHECKOUT_STAGE",
-        //     payload: 2,
-        // });
-        //props.history.push("/checkout/address");
+       // console.log('after check_stage',check_stage)
+        props.dispatch({
+            type: "CHECKOUT_STAGE",
+            payload: 2,
+        });
+        props.history.push("/checkout/address");
     }
 
-useEffect(() => {
-    if (props.checkout_stage===2) {
-      //props.history.push("/checkout/address");
+    const navbarLink = (url, link_index, event) => {
+        event.preventDefault()
+       // console.log('link_index',link_index)
+        //console.log('props.checkout_step',props.checkout_step)
+        //if(link_index <= props.checkout_step){
+            props.dispatch({
+                type: "UPDATE_CHECKOUT_STEP",
+                click_no: link_index,
+            });
+            props.history.push(url);
+       // }
+      };
+    
+
+
+    function enableLinks(index, bgColor){
+        $('ul.checkout-navbar > a:eq('+ index +')')
+                    .removeClass('cursor-default');
+        $('ul.checkout-navbar > a > li:eq('+ index +')')
+                    .removeClass('bg-light disabled-link text-muted');
+        $('ul.checkout-navbar > a > li:eq('+ index +')')
+                    .addClass(bgColor + ' text-white');
     }
-  }, [props.checkout_stage]);
+    
+    function disableLinks(){
+        $('ul.checkout-navbar > a')
+                    .addClass('cursor-default');
+        $('ul.checkout-navbar > a > li')
+                    .addClass('bg-light disabled-link text-muted');
+    }
+
+    useEffect(() => {
+     
+        props.dispatch({
+            type: "UPDATE_CURRENT_CHECKOUT_STEP",
+            payload: 1,
+        });
+
+    }, []); 
+   // useEffect(() => {
+        // disableLinks()
+        // if(props.clicked_step <= props.checkout_step){
+        //     for (var i = 0; i < props.checkout_step; i++) {
+        //         enableLinks(i, 'light-warning')
+        //     }
+        //     enableLinks(props.clicked_step -1, 'bg-warning') 
+        // } 
+       
+    //}, []);
+
+
+
+    var updateClickStep = (step)=>{
+        props.dispatch({
+            type: "UPDATE_CURRENT_CHECKOUT_STEP",
+            payload: step,
+        });
+    }
 
     return(
         <>
@@ -64,7 +117,7 @@ useEffect(() => {
                 <td  className="text-right"><b>Total Amount</b></td>
                 <td className="text-right"><b>{TotalPrice}</b></td>
             </tr>
-            <tr><td colSpan="3" className="text-center"> <button className="btn btn-success" onClick={confirm_summary}>Next</button> </td></tr>
+            <tr><td colSpan="3" className="text-center"> <button className="btn btn-success" onClick={updateClickStep(2)} >Next</button> </td></tr>
             </>
             :<tr><td colSpan="3" className="text-danger">Cart is Empty</td></tr>
             }
@@ -77,7 +130,8 @@ export default connect(function (state, props) {
     
     return {
         token: state?.user?.token,
-        checkout_stage: state?.checkout_stage,
-        user_cart: state?.user_cart
+        user_cart: state?.user_cart,
+        current_check_step: state?.current_check_step,
+        done_check_steps: state?.done_check_steps
     };
     })(CartSummary)

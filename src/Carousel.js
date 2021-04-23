@@ -8,7 +8,7 @@ var carouselImage=
 }
 function Carousel() {
   return (
-    <div style={{ paddingLeft:"15px"}} id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
+    <div  id="carouselExampleSlidesOnly" className="carousel slide" data-ride="carousel">
 	  <div className="carousel-inner">
 	    <div className="carousel-item active">
 	        <img src={carousel1}  style={carouselImage} className="d-block w-100" alt="..."/>

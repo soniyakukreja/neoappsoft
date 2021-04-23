@@ -1,5 +1,7 @@
 var demo = function(state={
-    user:null,checkout_stage:1
+    user:null,checkout_step:1,clicked_step:1,
+    current_check_step:1,
+    done_check_steps:0
 }, action){ // state - data of store
     switch(action.type){
         case "INITIALIZE_USER" : {
@@ -9,13 +11,20 @@ var demo = function(state={
             return state
 
         }
-        case "CHECKOUT_STAGE": {
-            state = {...state}
-            state['checkout_stage'] = action.payload
-            console.log('after state',state)
-            return state
 
+
+        case "UPDATE_CURRENT_CHECKOUT_STEP" : {
+            state = {...state}
+
+            state['current_check_step']= action.payload
+            // if(action?.step_no)
+            //     state['checkout_step'] = action.step_no
+            // if(action?.click_no)
+            //     state['clicked_step'] = action.click_no
+            
+            return state
         }
+
         case "LOGIN" : {
             state = {...state}
             state['isloggedin'] = true

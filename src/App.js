@@ -11,6 +11,7 @@ import Pagenotfound from './Pagenotfound'
 import Cakedetails from './Cakedetails'
 import Cart from './Cart'
 import Checkout from './Checkout'
+import Check from './Check'
 import ForgotPass from './ForgotPass'
 import axios from "axios"
 import { connect } from 'react-redux'
@@ -19,7 +20,6 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 
 function App(props) {
 console.log('app props',props)
-// console.log('currenturl',window.location.href)
 var [user_cart,setUser_cart]=useState()
 var [usertoken,setUsertoken]=useState()
 
@@ -82,13 +82,14 @@ useEffect(()=>{
            <Route path="/login"  exact  ><Login /></Route>
            <Route path="/signup" exact component={Signup} />
            <Route path="/forgotpass" exact component={ForgotPass} />
+           {/* <Route path="/check"   component={Check} /> */}
            {/* <Route path="/checkout"  component={Checkout} />
            <Route path="/cart" exact component={Cart} />
            */}
            {localStorage.token ?
            <>
            
-           <Route path="/checkout" exact  component={Checkout} />
+           <Route path="/checkout"  component={Checkout} />
            <Route path="/cart" exact component={Cart} />
            </>:''  
            }

@@ -2,13 +2,14 @@ import {useState,useEffect} from "react"
 import axios from "axios"
 import { Link ,withRouter } from "react-router-dom"
 import { connect } from "react-redux"
-
+import Spinner from "./UI/Spinner";
 
 
 function Login(props)
 {
+  const [loading, setLoading] = useState(false);
 
-  var [formErrors,setFormErrors] = useState({})
+  var [formErrors,setformErrors] = useState({})
   var [errorMessage,setErrorMessage]=useState()
   var [successMessage,setSuccessMessage]=useState()
 
@@ -42,10 +43,7 @@ function Login(props)
       
       var errorkeys = Object.keys(errors)
       if(errorkeys.length>0)
-      <>
-      setFormErrors(errors)
       return errors
-      </>
       else
       return false
   }
@@ -57,10 +55,11 @@ function Login(props)
         
         if(errors){
           console.log('errors',errors)
-            setFormErrors(errors)
-            console.log('ferrors',formErrors)
+          setformErrors(errors)
+            
         }else{
-
+          setformErrors({})
+          setLoading(true);
           if(user.email && user.password){
               
           let apiurl="https://apibyashu.herokuapp.com/api/login"
@@ -85,9 +84,11 @@ function Login(props)
                   setErrorMessage("Invalid credentials")
                   setSuccessMessage("")
                 }
+                setLoading(false);
             },(error)=>{
               setErrorMessage("Error from Login api "+error) 
               setSuccessMessage("") 
+              setLoading(false);
             })
           }
           else{
@@ -96,9 +97,10 @@ function Login(props)
           }
       }
     }
-
 		return(
-            
+      
+      loading?( <Spinner />
+        ):(
 			<div style={{width:"50%" , margin:"auto"}} className="col-md-6">
               <h2> Login Here ! </h2>
               <form id="login">
@@ -106,11 +108,13 @@ function Login(props)
                     <label>Email</label>
                 <input type="email" id="email" className="form-control" onChange={getEmail}></input>
                    {/* { user?.email && <label>{user.email}</label> } */}
-                   {formErrors?.name && <div className="form-error"> <div>{formErrors.name}</div></div>}
+                   {formErrors?.email && <div className="form-error"> <div>{formErrors.email}</div></div>}
                 </div>
                 <div className="form-group">
                 <label>Password</label>
                 <input type="password" id="password" className="form-control" onChange={getPassword}></input>
+                {formErrors?.password && <div className="form-error"> <div>{formErrors.password}</div></div>}
+
                    {/* {user?.password && <label>{user.password}</label> } */}
                 </div>
                 <div style={{color:"red"}}  className="text-center">
@@ -120,15 +124,18 @@ function Login(props)
                 <div style={{color:"green"}} className="text-center">
                     {successMessage}
                 </div>:''}
-                <button className="btn btn-success form-control text-center my-2"  onClick={login}>Login</button>
+                <button className="btn text-light form-control text-center my-2"style={{backgroundColor:"#043d76"}}  onClick={login}>Login</button>
                 </form>
-                <div style={{float:'right'}}>
-                  <Link to="/forgotpass">Forgot password</Link>
+                  <div className="row">
+                <div  className="col-6">
+                  <Link to="/signup" style={{float:'left'}}>New User? Click Here</Link>
                 </div>
-                <div>
-                  <Link to="/signup">New User? Click Here</Link>
+                <div className="col-6">
+                  <Link to="/forgotpass" style={{float:'right'}}>Forgot password</Link>
+                </div>
                 </div>
             </div>
+        )
 		)
 	
 }

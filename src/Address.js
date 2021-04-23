@@ -1,8 +1,11 @@
-import {useState} from "react"
+import {useState, useEffect} from "react"
 import { connect } from "react-redux"
+import $ from 'jquery';
 
 function Address(props){
-    console.log('add props',props)
+    var [current_check_state,setCurrentCheckState] = useState(2)
+
+   // console.log('add props',props)
     var [formerrors,setFormerrors] = useState({})
     var [address,setAddress] = useState({})
 
@@ -64,6 +67,31 @@ function Address(props){
         })
         delete formerrors.phone; 
     }
+    function enableLinks(index, bgColor){
+        $('ul.checkout-navbar > a:eq('+ index +')')
+                    .removeClass('cursor-default');
+        $('ul.checkout-navbar > a > li:eq('+ index +')')
+                    .removeClass('bg-light disabled-link text-muted');
+        $('ul.checkout-navbar > a > li:eq('+ index +')')
+                    .addClass(bgColor + ' text-white');
+    }
+    
+    function disableLinks(){
+        $('ul.checkout-navbar > a')
+                    .addClass('cursor-default');
+        $('ul.checkout-navbar > a > li')
+                    .addClass('bg-light disabled-link text-muted');
+    }
+    
+
+    useEffect(() => {
+     
+        props.dispatch({
+            type: "UPDATE_CURRENT_CHECKOUT_STEP",
+            payload:2
+        });
+
+    }, []);
 
     return(
         <div style={{width:"90%" , margin:"auto"}}>
@@ -102,6 +130,9 @@ function Address(props){
 export default connect(function(state,props){
     return {
         token: state?.user?.token,
-        checkout_stage: state?.checkout_stage,
+        // checkout_step : state?.checkout_step,
+        // clicked_step: state?.clicked_step
+        current_check_step: state?.current_check_step,
+        done_check_steps: state?.done_check_steps
     };
 })(Address)
