@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { useEffect, useState} from "react"
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 
 function Navbar(props) {
-  console.log('navprops',props);
-  var onlinestaus=0;
+  console.log('nav props',props)
 
   let [searchkey,setSearchkey] = useState('');
   let getSearchVal=(e)=>{
@@ -19,8 +18,7 @@ function Navbar(props) {
     props.dispatch({
         type:"LOGOUT",
     })
-    
-    console.log('AFTERlogout',props)
+    props.history.push("/");
   }
 
   return (
@@ -47,27 +45,23 @@ function Navbar(props) {
        {
          props.loginstatus ? 
          <div>
-         <Link to="/cart" className="btn btn-warning my-2 my-sm-0 text-white mr-2"><FontAwesomeIcon icon={faShoppingCart} /> ({props.cart_data_length})</Link>
+         <Link to="/cart" className="btn btn-warning m-2 my-sm-0 mr-2"><FontAwesomeIcon icon={faShoppingCart} />{props.cart_data_length>0?props.cart_data_length:''}</Link>
 
-         <button onClick={logout} className="btn btn-danger">Logout</button>
+         <button onClick={logout} className="btn btn-danger  m-2">Logout</button>
          </div>
-         : <Link to="/login"> <button className="btn btn-success">Login</button></Link>
+         : <Link to="/login"> <button className="btn btn-success m-2">Login</button></Link>
         }
     </div>
   </div>
 </nav>
   );
 }
-//export default Navbar;
+Navbar = withRouter(Navbar);
 export default connect(function(state,props){
-  //console.log('navestate',state.cart_data.length)
   return {
-    // user :state && state["user"]["name"],
-    // loginstatus:state && state["isloggedin"]
-
     //?. this checks  if exists then
     user :state?.user?.name,
     loginstatus:state?.isloggedin,
-   // user_cart_length :state?.cart_data?.cart_data.length
+    cart_data_length : state?.user_cart?.length
     }
 })(Navbar)

@@ -11,59 +11,63 @@ import Pagenotfound from './Pagenotfound'
 import Cakedetails from './Cakedetails'
 import Cart from './Cart'
 import Checkout from './Checkout'
+import ForgotPass from './ForgotPass'
 import axios from "axios"
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
 
 function App(props) {
+console.log('app props',props)
+// console.log('currenturl',window.location.href)
+var [user_cart,setUser_cart]=useState()
+var [usertoken,setUsertoken]=useState()
+
+useEffect(()=>{
 
   if(localStorage.token && !props.user){
+    
     var token = localStorage.token 
     axios({
-      url:'https://apibyashu.herokuapp.com/api/getuserdetails',
-      method:'get',
-      headers:{
-        authtoken:token
+        url:'https://apibyashu.herokuapp.com/api/getuserdetails',
+        method:"get",
+        headers : {
+          authtoken: token
       }
     }).then((response)=>{
-      props.dispatch({
-        type:"INITIALIZE_USER",
-        payload:response.data.data
+         props.dispatch({
+          type:"INITIALIZE_USER",
+          payload:response.data.data
       })
+      setUsertoken(response.data.token)
 
-
-    },(error)=>{
-
+    }, (error)=>{
+        console.log("response from get user details api : ",error)
     })
   }
+  
 
-
-/*
-  if(localStorage.token && props.user && !props.user_cart){
-    alert("if user obj found")
-    let getCartDetailsAPI = "https://apibyashu.herokuapp.com/api/cakecart"
-        let token = localStorage.token
-        axios({
-            url:getCartDetailsAPI,
-            method:"post",
-            data: {},
-            headers : {
-                authtoken: token
-            }
-        }).then((response)=>{
+    if(localStorage.token){
+      axios({
+          url:"https://apibyashu.herokuapp.com/api/cakecart",
+          method:"post",
+          data: {},
+          headers : {
+              authtoken: localStorage.token
+          }
+      }).then((response)=>{
           props.dispatch({
             type:"CART_DATA",
             payload:response.data.data
-          })
-             console.log("user cart data : ",response)
-             console.log('after props',props)
-            // setcartDetails(response.data.data)
-        }, (error)=>{
-            console.log("error from user cartapi : ",error)
         })
-  }
-  */
+        setUser_cart(response.data.token)
+      }, (error)=>{
+          console.log("user get cart api error : ",error)
+      })
+    }
+  },[props.token])
+
+
   return (
    <div>
      <Router>
@@ -72,20 +76,23 @@ function App(props) {
        <Switch>
            <Route path="/" exact component={Home} />
            <Route path="/search" exact component={Search} />  
-           <Route path="/cake/:cakeid" exact > <Cakedetails /></Route>
-           {!props.user ?
-           <div>
+           <Route path="/cake/:cakeid" exact component={Cakedetails} />
+           
+
            <Route path="/login"  exact  ><Login /></Route>
            <Route path="/signup" exact component={Signup} />
-           </div>:''
-          }
-           {props.user ?
-           <div>
-           <Route path="/checkout"  component={Checkout} />
+           <Route path="/forgotpass" exact component={ForgotPass} />
+           {/* <Route path="/checkout"  component={Checkout} />
            <Route path="/cart" exact component={Cart} />
-           </div>:''  
+           */}
+           {localStorage.token ?
+           <>
+           
+           <Route path="/checkout" exact  component={Checkout} />
+           <Route path="/cart" exact component={Cart} />
+           </>:''  
            }
-            {/* <Route path="/*" exact component={Pagenotfound} /> */}
+           {/* <Route path="/*" exact component={Pagenotfound} /> */}
 
             <Route path="/*">
              <Redirect to="/"></Redirect>
@@ -98,5 +105,8 @@ function App(props) {
 }
 
 export default connect(function(state,props){
- return{  user:state?.user }
+ return{
+     user:state?.user ,
+     token:state?.user?.token
+  }
 })(App);

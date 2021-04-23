@@ -13,7 +13,6 @@ function Cakedetails(props) {
 
   let [cakedetail,setCakedetails] = useState({})
   let params = useParams();
-  console.log('cakedetail params............',params)
 
   useEffect(()=>{
     let cakedetailsapi = "https://apibyashu.herokuapp.com/api/cake/"+params.cakeid;
@@ -29,8 +28,6 @@ function Cakedetails(props) {
 
   var addtocart = function(e){
     e.preventDefault()
-    alert('add')
-    console.log('cakedetail.... in adtocart',cakedetail.cakeid)
     if(localStorage.token && props.user){
       var token = localStorage.token 
       axios({
@@ -48,11 +45,17 @@ function Cakedetails(props) {
         }
       }).then((response)=>{
         props.dispatch({
-          type:"ADD_CART_DATA"
+          type:"ADD_CART_DATA",
+          payload: response.data.data
         })
+        alert('Added to your cart')
+        props.history.push("/cart")
+
       },(error)=>{
 
       })
+    }else{
+      alert('Please Login to proceed')
     }
   }
 
