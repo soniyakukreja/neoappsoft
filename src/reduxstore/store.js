@@ -1,11 +1,18 @@
 import {createStore,applyMiddleware} from "redux"
 import demo from "./reducers"
-import {FirstMiddleWare} from "./Middleware"
-
-// var middlewares = applyMiddleware(FirstMiddleWare)
-
-// var store = createStore(demo,middlewares)
-var store = createStore(demo)
+import createSaga from "redux-saga"
+import {LoginSaga, AllCakesSaga, userInitSaga} from "./sagas"
+//import thunk from "redux-thunk"
 
 
-export default store
+var sagaMiddleware = createSaga()
+
+//var middlewares = applyMiddleware(thunk,sagaMiddleware)
+var middlewares = applyMiddleware(sagaMiddleware)
+
+
+export default createStore(demo,middlewares)
+sagaMiddleware.run(LoginSaga)
+
+sagaMiddleware.run(AllCakesSaga)
+sagaMiddleware.run(userInitSaga)

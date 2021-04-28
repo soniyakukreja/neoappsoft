@@ -18,45 +18,45 @@ function CartSummary(props){
     var Count = 0
 
     let confirm_summary = (e)=>{
-        setCheck_stage(2)
+        //setCheck_stage(2)
        // console.log('after check_stage',check_stage)
-        props.dispatch({
-            type: "CHECKOUT_STAGE",
-            payload: 2,
-        });
+        // props.dispatch({
+        //     type: "CHECKOUT_STAGE",
+        //     payload: 2,
+        // });
         props.history.push("/checkout/address");
     }
 
-    const navbarLink = (url, link_index, event) => {
-        event.preventDefault()
-       // console.log('link_index',link_index)
-        //console.log('props.checkout_step',props.checkout_step)
-        //if(link_index <= props.checkout_step){
-            props.dispatch({
-                type: "UPDATE_CHECKOUT_STEP",
-                click_no: link_index,
-            });
-            props.history.push(url);
-       // }
-      };
+    // const navbarLink = (url, link_index, event) => {
+    //     event.preventDefault()
+    //    // console.log('link_index',link_index)
+    //     //console.log('props.checkout_step',props.checkout_step)
+    //     //if(link_index <= props.checkout_step){
+    //         props.dispatch({
+    //             type: "UPDATE_CHECKOUT_STEP",
+    //             click_no: link_index,
+    //         });
+    //         props.history.push(url);
+    //    // }
+    //   };
     
 
 
-    function enableLinks(index, bgColor){
-        $('ul.checkout-navbar > a:eq('+ index +')')
-                    .removeClass('cursor-default');
-        $('ul.checkout-navbar > a > li:eq('+ index +')')
-                    .removeClass('bg-light disabled-link text-muted');
-        $('ul.checkout-navbar > a > li:eq('+ index +')')
-                    .addClass(bgColor + ' text-white');
-    }
+    // function enableLinks(index, bgColor){
+    //     $('ul.checkout-navbar > a:eq('+ index +')')
+    //                 .removeClass('cursor-default');
+    //     $('ul.checkout-navbar > a > li:eq('+ index +')')
+    //                 .removeClass('bg-light disabled-link text-muted');
+    //     $('ul.checkout-navbar > a > li:eq('+ index +')')
+    //                 .addClass(bgColor + ' text-white');
+    // }
     
-    function disableLinks(){
-        $('ul.checkout-navbar > a')
-                    .addClass('cursor-default');
-        $('ul.checkout-navbar > a > li')
-                    .addClass('bg-light disabled-link text-muted');
-    }
+    // function disableLinks(){
+    //     $('ul.checkout-navbar > a')
+    //                 .addClass('cursor-default');
+    //     $('ul.checkout-navbar > a > li')
+    //                 .addClass('bg-light disabled-link text-muted');
+    // }
 
     useEffect(() => {
      
@@ -88,9 +88,18 @@ function CartSummary(props){
 
     return(
         <>
-        <table className="table table-hover">
+        
         {props.user_cart?.length >0  ? 
         <>
+        <table className="table table-hover">
+            <thead><tr>
+                <th  className="text-left">
+                Product
+                </th>
+            <th className="text-left">Name</th>
+            <th className="text-right">Price</th>
+            </tr></thead>
+            <tbody>
         {props.user_cart?.length >0 && props.user_cart.map((each,index) => {
             TotalPrice += each.price
             Count += 1
@@ -98,10 +107,10 @@ function CartSummary(props){
             return(
 
                 <tr key={index}>
-                    <td className="text-center">
+                    <td className="text-left">
                         <img src={each.image} className=""  alt="..." style={{height:"40px", width:"40px"}}  />
                     </td>
-                    <td className="text-center">
+                    <td className="text-left">
                         {each.name}
                     </td>
                     <td className="text-right">
@@ -114,14 +123,16 @@ function CartSummary(props){
             
             <tr>
             <td></td>
-                <td  className="text-right"><b>Total Amount</b></td>
+                <td className="text-right"><b>Total Amount</b></td>
                 <td className="text-right"><b>{TotalPrice}</b></td>
             </tr>
-            <tr><td colSpan="3" className="text-center"> <button className="btn btn-success" onClick={updateClickStep(2)} >Next</button> </td></tr>
-            </>
-            :<tr><td colSpan="3" className="text-danger">Cart is Empty</td></tr>
-            }
+            <tr><td colSpan="3" className="text-center"> <button className="btn btn-success" onClick={confirm_summary} >Next</button> </td></tr>
+            </tbody>
         </table>
+            </>
+            :<div className="alert alert-danger"  role="alert" >Cart is Empty</div>
+            }
+           
         </>
     )
 }

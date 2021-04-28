@@ -13,8 +13,19 @@ function Payment(props){
 
     }, []);
 
+    var confirmPaymode = ()=>{
+        props.history.push('/checkout/order')
+    }
+
     return(
-        <div>Paymenty</div>
+        <>
+        <h2>Payment Page</h2>
+        <div className="container">
+            <input type="radio"  defaultChecked  /> Cash on Delivery
+            <br/>
+        <button type="button" className=" mt-3 btn btn-success" onClick={confirmPaymode} >Proceed Further</button>
+        </div>
+        </>
     )
 }
 export default connect(function(state,props){

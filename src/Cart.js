@@ -7,7 +7,7 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from "react";
 
 function Cart(props){
-    console.log('cart props',props)
+   // console.log('cart props',props)
    //var [cartDetails, setcartDetails]=useState()
     
     var removefromCart = function(cakeid, array_index){
@@ -38,11 +38,11 @@ function Cart(props){
     var Count = 0
     // /addcaketocart
     return(
-        <div>
+        <>
             <div className="row">
                 {props.cartDetails?.length >0  ? 
-                <div className="col-m-12">
-                    <div className="col-m-8">
+                <>
+                    <div className="col-8">
                     {props.cartDetails?.length >0 && props.cartDetails.map((each,index) => {
 
                         TotalPrice += each.price
@@ -72,8 +72,9 @@ function Cart(props){
                     })}
                
                   
-                </div>
-                 <div className="col-m-4">
+                
+               </div>
+                <div className="col-4">
                     <div className="row m-3 p-3 border rounded text-center">
                         <div className="col-sm-6"><u>Total Items</u><br/>{Count}</div>
                         <div className="col-sm-6"><u>Total Price</u><br/>{TotalPrice}</div>
@@ -81,17 +82,18 @@ function Cart(props){
                     </div>
                     <div className="row m-3 p-3 float-right"><Link to="/checkout"><button className="btn btn-success my-2 my-sm-0"> Checkout</button></Link></div>
                 </div>
-                </div>:
-                <div className="row" ><div className=" m-3 text-center">CART is empty</div></div>
+                </>
+                :
+                <div className="alert alert-danger m-3 text-center col-12"><center>CART is empty</center></div>
                 }
             </div>
-        </div>
+        </>
     )
 }
 
 
 export default connect(function(state, props){
-    console.log('cart state',state)
+    //console.log('cart state',state)
     return {
         cartDetails :state?.user_cart
     }

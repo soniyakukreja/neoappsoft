@@ -36,14 +36,18 @@ function Address(props){
         return false
     }
 
-    var placeOrder = function(e){
+    var saveAddress = function(e){
         e.preventDefault()
         var form = document.getElementById('Addressform')
         var errors = validate(form.elements)
         if(errors){
             setFormerrors(errors)
         }else{
-
+            props.dispatch({
+                type:"SAVE_ADDRESS",
+                payload:address
+            })
+            props.history.push('/checkout/payment')
         }
     }
 
@@ -58,30 +62,39 @@ function Address(props){
 
     let getPhone=(event)=>
     {
-        console.log('formerrors',formerrors)
-        //formerrors(errors)
-
         setAddress({
             ...address,
             phone:event.target.value,
         })
         delete formerrors.phone; 
     }
-    function enableLinks(index, bgColor){
-        $('ul.checkout-navbar > a:eq('+ index +')')
-                    .removeClass('cursor-default');
-        $('ul.checkout-navbar > a > li:eq('+ index +')')
-                    .removeClass('bg-light disabled-link text-muted');
-        $('ul.checkout-navbar > a > li:eq('+ index +')')
-                    .addClass(bgColor + ' text-white');
+    let getAddress=(event)=>
+    {
+        setAddress({
+            ...address,
+            address:event.target.value,
+        })
+        delete formerrors.address; 
+    }
+
+    let getCity=(event)=>
+    {
+        setAddress({
+            ...address,
+            city:event.target.value,
+        })
+        delete formerrors.city; 
+    }
+
+    let getPin=(event)=>
+    {
+        setAddress({
+            ...address,
+            pin:event.target.value,
+        })
+        delete formerrors.pin; 
     }
     
-    function disableLinks(){
-        $('ul.checkout-navbar > a')
-                    .addClass('cursor-default');
-        $('ul.checkout-navbar > a > li')
-                    .addClass('bg-light disabled-link text-muted');
-    }
     
 
     useEffect(() => {
@@ -104,25 +117,25 @@ function Address(props){
                 </div>
                 <div className="form-group">
                 <label>Phone</label>
-                <input type="text" name="phone" id="phone" className="form-control"></input>
+                <input type="text" name="phone" id="phone" onChange={getPhone}  className="form-control"></input>
                 <div className="form-error">{formerrors?.phone && <div>{formerrors.phone}</div> }</div>
                 </div>
                 <div className="form-group">
                 <label>Address</label>
-                <input type="text" name="address" id="address" className="form-control"></input>
+                <input type="text" name="address" id="address" onChange={getAddress}  className="form-control"></input>
                 <div className="form-error">{formerrors.address}</div>
                 </div>
                 <div className="form-group">
                 <label>City</label>
-                <input type="text" name="city" id="city" className="form-control"></input>
+                <input type="text" name="city" id="city" onChange={getCity}  className="form-control"></input>
                 <div className="form-error">{formerrors.city}</div>
                 </div>
                 <div className="form-group">
                 <label>Pin</label>
-                <input type="text" name="pin" id="pin" className="form-control"></input>
+                <input type="text" name="pin" id="pin" onChange={getPin}  className="form-control"></input>
                 <div className="form-error">{formerrors.pin}</div>
                 </div>
-                <button onClick={placeOrder}>Place Order</button>
+                <button className="btn btn-success" onClick={saveAddress}>Place Order</button>
             </form>   
             </div>
     )

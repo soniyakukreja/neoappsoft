@@ -3,14 +3,15 @@ import { useEffect, useState} from "react"
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { ToastContainer, toast } from 'react-toastify';    
+import 'react-toastify/dist/ReactToastify.css';    
 
 function Navbar(props) {
-  console.log('nav props',props)
+  //console.log('nav props',props)
 
   let [searchkey,setSearchkey] = useState('');
   let getSearchVal=(e)=>{
     setSearchkey(e.target.value)
-    
   }
 
   let logout = (event)=>{
@@ -18,6 +19,8 @@ function Navbar(props) {
     props.dispatch({
         type:"LOGOUT",
     })
+    toast.configure()
+    toast.success("You have logged Out successfully!")
     props.history.push("/");
   }
 
@@ -46,6 +49,7 @@ function Navbar(props) {
          props.loginstatus ? 
          <div>
          <Link to="/cart" className="btn m-2 my-sm-0 mr-2 text-light" style={{backgroundColor:"#1e77d07a"}} ><FontAwesomeIcon icon={faShoppingCart} /><b className="pl-1">{props.cart_data_length>0?props.cart_data_length:''}</b></Link>
+         <Link to="/myorders" className="btn my-sm-0 text-light" style={{backgroundColor:"#1e77d07a"}} ><b>My Orders</b></Link>
 
          <button onClick={logout} className="btn btn-danger  m-2">Logout</button>
          </div>

@@ -3,6 +3,8 @@ import axios from "axios"
 import { Link ,withRouter } from "react-router-dom"
 import { connect } from "react-redux"
 import Spinner from "./UI/Spinner";
+import { ToastContainer, toast } from 'react-toastify';    
+import 'react-toastify/dist/ReactToastify.css';    
 
 
 function Login(props)
@@ -33,7 +35,6 @@ function Login(props)
     var validate = function (elm){
       var errors= {}
       if(!elm.email.value){
-          
         errors.email= "Email is Required"
       }
 
@@ -62,34 +63,11 @@ function Login(props)
           setLoading(true);
           if(user.email && user.password){
               
-          let apiurl="https://apibyashu.herokuapp.com/api/login"
-            axios({
-                  url:apiurl,
-                  method:"post",
-                  data:user
-            }).then((response)=>{
-                if(response.data.token)
-                {
-                  localStorage.token = response.data.token
-                  setErrorMessage("")
-                  setSuccessMessage("Logged In Successfully")
-
-                  props.dispatch({
-                    type:"LOGIN",
-                    payload:response.data
-                  })
-                  props.history.push("/")
-                }else
-                {
-                  setErrorMessage("Invalid credentials")
-                  setSuccessMessage("")
-                }
-                setLoading(false);
-            },(error)=>{
-              setErrorMessage("Error from Login api "+error) 
-              setSuccessMessage("") 
-              setLoading(false);
+            props.dispatch({
+              type:"LOGIN",
+              payload:user
             })
+
           }
           else{
             setErrorMessage("Validation Failed")
@@ -97,6 +75,17 @@ function Login(props)
           }
       }
     }
+
+
+    useEffect(()=>{
+      if(props?.token){
+        toast.configure()
+        toast.success("You have successfully logged in!")
+        props.history.push('/')
+
+      }
+    },[props.token])
+
 		return(
       
       loading?( <Spinner />
@@ -107,7 +96,6 @@ function Login(props)
                 <div className="form-group">
                     <label>Email</label>
                 <input type="email" id="email" className="form-control" onChange={getEmail}></input>
-                   {/* { user?.email && <label>{user.email}</label> } */}
                    {formErrors?.email && <div className="form-error"> <div>{formErrors.email}</div></div>}
                 </div>
                 <div className="form-group">
@@ -115,11 +103,12 @@ function Login(props)
                 <input type="password" id="password" className="form-control" onChange={getPassword}></input>
                 {formErrors?.password && <div className="form-error"> <div>{formErrors.password}</div></div>}
 
-                   {/* {user?.password && <label>{user.password}</label> } */}
                 </div>
+                {props?.error && 
                 <div style={{color:"red"}}  className="text-center">
-                    {errorMessage}
+                    Invalid credentials
                 </div>
+                  }
                 {successMessage?
                 <div style={{color:"green"}} className="text-center">
                     {successMessage}
@@ -142,4 +131,11 @@ function Login(props)
 
 Login = withRouter(Login)
 
-export default connect()(Login);
+export default connect((state,props)=>{
+  return{
+    error:state?.islogginerror,
+    token: state?.user?.token,
+    isLogin: state?.isloggedin,
+    loading:state?.isfetching
+  }
+})(Login);
