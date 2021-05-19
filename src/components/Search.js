@@ -1,27 +1,29 @@
+import {useEffect , useState} from "react";
+import queryString from "query-string"
 import axios from 'axios'
 import Cake from './Cake';
 import Carousel from './Carousel'
-import {useEffect , useState} from "react";
-import queryString from "query-string"
-import Spinner from "./UI/Spinner";
+import Spinner from "../UI/Spinner";
+
 
 function Search(props)
 {       
+    var baseurl  = process.env.REACT_APP_BASE_URL
+
     const [loading, setLoading] = useState(false);
     const parsed = queryString.parse(props.location.search)
-   // console.log(props.location.search)
 
        let [cakesearch,setCakes]=useState([])
   
         //using query string 
-        let apisearchurl="https://apibyashu.herokuapp.com/api/searchcakes?q="+parsed.q
+        let apisearchurl= baseurl+"searchcakes?q="+parsed.q
+
         useEffect(() => {
             setLoading(true);
             axios({
                 url:apisearchurl,
                 method:"get",
             }).then((response)=>{
-                console.log("response from search api" ,response.data)
                 setCakes(response.data.data)
                 setLoading(false);
             },(error)=>{

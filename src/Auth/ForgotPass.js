@@ -1,8 +1,11 @@
 import {useState,useEffect} from "react"
-import axios from "axios"
+//import axios from "axios"
 import {connect} from "react-redux"
+import { ForgotPassThunk,abc } from "../reduxstore/thunk";
 
-var ForgotPass = function(){
+var ForgotPass = function(props){
+    console.log('props',props)
+
     var uemail = '';
     var [formErrors,setfErrors] = useState()
 
@@ -27,45 +30,32 @@ var ForgotPass = function(){
 
     const forgotpass = ()=>{
        validate()
-        console.log('validate',isValid)
         if(isValid){
 
-            axios({
-                url:"https://apibyashu.herokuapp.com/api/recoverpassword",
-                method:"post",
-                data:{email:uemail}
-            }).then((response)=>{
-                if(response.data.message){
-                    alert(response.data.message)
-                    document.getElementById('email').value = ''
-                }
-                if(response.data.errorMessage){
-                    alert(response.data.errorMessage)
-                }
-                
-                console.log('response',response)
-            
-            },(error)=>{
-            //   setErrorMessage("Error from Login api "+error) 
-            //   setSuccessMessage("") 
-            })
+            props.dispatch(ForgotPassThunk({email:uemail}))
+            //props.dispatch(abc({}))
         }
     }
 
     return(
-        <div style={{width:"50%" , margin:"auto"}} className="col-md-6">
+        <div style={{width:"50%"}} className="container col-md-6 mt-3 mb-3">
         <h2 style={{color:"red"}}> Find Your Account</h2>
         <p>Please enter your email address to search for your account.</p>
         <form method="post">
             <input className="form-control" onChange={getEmail} type="email" id="email" placeholder="Email Address" name="email" />
-            <div className="text-bold text-danger ">{formErrors?formErrors:''}</div>
+            {formErrors && <div className="text-bold text-danger ">{formErrors}</div>}
             <br/>
-            <button onClick={forgotpass} type="button" className="btn btn-success">Send</button>
+            { props?.reset_mail_sent && <div className="text-bold text-danger ">{props.reset_mail_sent}</div> }
+            <button  className="btn text-light form-control text-center my-2"style={{backgroundColor:"#043d76"}} onClick={forgotpass} type="button" >Send</button>
         </form>
         </div>
     )
 }
 
 export default connect(function(state,props){
-return{}
+
+return{
+    hello:state?.hello,
+    reset_mail_sent:state?.reset_mail_sent
+}
 })(ForgotPass)

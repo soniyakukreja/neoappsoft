@@ -1,24 +1,29 @@
 import axios from "axios"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
+const api_base = process.env.REACT_APP_BASE_URL
+toast.configure()
+
 
 //=============LOGIN====================
-function login(action) {
+function loginn(action) {
     return axios({
         method: "post",
-        url: "https://apibyashu.herokuapp.com/api/login",
+        url: api_base + "login",
         data: action.payload
     })
 }
 
 function* LoginGenerator(action) {
-    var result = yield call(login, action)
-    console.log('login saga line15',result)
 
+    yield put({ type: 'LOGIN_PROGRESS' })
+    var result = yield call(loginn, action)
     // based on result of task
     // we will dispatch differenet type of requests
     if (result.data.token) {
         yield put({ type: 'LOGIN_SUCCESS', payload: result.data })
-        // yield call(GET_CART_DATA,action)
+        toast.success(result.data.message)
 
         var statee = yield select(function (state) {
             return state
@@ -28,7 +33,7 @@ function* LoginGenerator(action) {
         }
     } else {
         yield put({ type: 'LOGIN_FAILURE' })
-        console.log('LOGIN_FAILURE put')
+        toast.error(result.data.message)
     }
 }
 
@@ -43,7 +48,7 @@ export function* LoginSaga() {
 function getCakes(action) {
     return axios({
         method: "get",
-        url: "https://apibyashu.herokuapp.com/api/allcakes",
+        url: api_base + "allcakes",
     })
 }
 
@@ -52,7 +57,6 @@ export function* AllCakesSaga() {
 }
 function* CakeGenerator(action) {
     var result = yield call(getCakes, action)
-
     if (result.data.data.length > 0) {
         yield put({ type: 'CAKES_RECEIVED', payload: result.data })
     }
@@ -63,47 +67,63 @@ function* CakeGenerator(action) {
 
 //==============initialize user =======================
 
-export function* userInitSaga(){
-    yield takeEvery('USER_INIT',UserGenerator)
+export function* userInitSaga() {
+    yield takeEvery('USER_INIT', UserGenerator)
 }
 
-export function* UserGenerator(action){
-    var result = yield call(user_init,action)
-    if(result?.data){
+export function* UserGenerator(action) {
+    var result = yield call(user_init, action)
+    if (result?.data) {
         yield put({ type: 'INITIALIZE_USER', payload: result.data.data })
 
-        if(result?.data?.data?.token){
-            var cart_result = yield call(user_cart,action)
+        if (result?.data?.data?.token) {
+            var cart_result = yield call(user_cart, action)
             yield put({ type: 'CART_DATA', payload: cart_result.data.data })
         }
     }
 }
 
-function user_init(action){
-    var token = localStorage.token 
-    // console.log('token>>>> in userinit>>>>',token)
+function user_init(action) {
+    var token = localStorage.token
     return axios({
-    url:'https://apibyashu.herokuapp.com/api/getuserdetails',
-    method:"get",
-    headers : {
-        authtoken: token
-    }
+        url: api_base + 'getuserdetails',
+        method: "get",
+        headers: {
+            authtoken: token
+        }
     })
 }
 
-function user_cart(action){
-    var token = localStorage.token 
+function user_cart(action) {
+    var token = localStorage.token
     return axios({
-    url:'https://apibyashu.herokuapp.com/api/cakecart',
-    method:"post",
-    headers : {
-        authtoken: token
-    }
+        url: api_base + 'cakecart',
+        method: "post",
+        headers: {
+            authtoken: token
+        }
     })
 }
 //==============initialize user =======================
 
+function getCakeDetail(action) {
+    return axios({
+        method: "get",
+        url: api_base + "allcakes",
+    })
+}
 
+export function* CakeDetailSaga() {
+    yield takeEvery('cakeDetail', detailGenerator)
+}
+
+function* detailGenerator(action) {
+    var result = yield call(getCakeDetail, action)
+    if (result.data.data > 0) {
+        yield put({ type: 'CAKE_DETAIL', payload: result.data.data })
+    }
+
+}
 /*export function* OrderSaga(){
     yield takeEvery('ADD_ORDER', LoginGenerator)
     yield takeEvery('FETCH_ORDER')

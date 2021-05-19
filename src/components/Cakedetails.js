@@ -1,35 +1,39 @@
 import {useParams} from "react-router-dom"
 import axios from "axios"
 import { useEffect, useState} from "react"
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { connect } from "react-redux"
-import Spinner from "./UI/Spinner";
-
+import Spinner from "../UI/Spinner";
+var baseurl  = process.env.REACT_APP_BASE_URL
 const heart = <FontAwesomeIcon icon={faHeart} />
 
 function Cakedetails(props) {
 
-  const [loading, setLoading] = useState(false);
+
+  const [loading, setLoading] = useState(true);
 
   let [cakedetail,setCakedetails] = useState({})
+  console.log('cakedetail',cakedetail)
   let params = useParams();
 
   useEffect(()=>{
-    setLoading(true);
-    let cakedetailsapi = "https://apibyashu.herokuapp.com/api/cake/"+params.cakeid;
+    let cakedetailsapi = baseurl+"cake/"+params.cakeid;
     axios({
       method:"get",
       url:cakedetailsapi
     }).then((response)=>{
+      if(response.data.data){
+        console.log('fffffffff')
       setCakedetails(response.data.data);
       setLoading(false);
+      }  
+
     },(error)=>{
       console.log("error found",error)
       setLoading(false);
     })
-  },[])
+  },[params.cakeid])
 
   var addtocart = function(e){
     setLoading(true);
@@ -38,7 +42,7 @@ function Cakedetails(props) {
       var token = localStorage.token 
       axios({
         method:"post",
-        url:"https://apibyashu.herokuapp.com/api/addcaketocart",
+        url:baseurl+"addcaketocart",
         data:{
           cakeid:cakedetail.cakeid,
           name:cakedetail.name,
@@ -54,9 +58,9 @@ function Cakedetails(props) {
           type:"ADD_CART_DATA",
           payload: response.data.data
         })
-        alert('Added to your cart')
         setLoading(false);
         props.history.push("/cart")
+        alert('Added to your cart')
 
       },(error)=>{
 
@@ -69,46 +73,24 @@ function Cakedetails(props) {
 
 
   return (
-    loading?( <Spinner />
-      ):(
-    <div className="cakedetails" style={{ marginTop:"20px",paddingLeft:"30px"}}>
-	    <div className="row">
+    <main className="Site-content Site-content--full">
+      {loading?( <Spinner />):(<div className="cakedetails" style={{ marginTop:"20px",paddingLeft:"30px"}}>
+      <div className="row">
          <div className="col-md-4">
-           <img src={cakedetail.image} style={{height:"400px",width:"390px"}} className="card-img-top" alt="..." />
+           <img src={cakedetail?.image} className="cakeDetailImg card-img-top" alt="..." />
          </div>
          <div className="col-md-6 ml-3">
          <div className="row ">
-           <div className="col-2"> <strong class="reviewPoint" style={{
-                display: "inline-block",
-                background: `url(https://img.floweraura.com/sites/default/files/ssr/static/media/fill_star.7ae2f2da.svg) no-repeat 0 0`,
-                backgroundPosition: "4px 4px",
-                backgroundSize: "19px",
-                padding: "5px 8px 6px 30px",
-                fontSize: "14px",
-                fontWeight: "700",
-                fontStretch: "normal",
-                fontStyle: "normal",
-                lineHeight: "1.25",
-                letterSpacing: "normal",
-                textAlign: "left",
-                color: "#1c2120",
-                borderRadius: "5px",
-                boxShadow: `0 0 10px 0 rgb(0 0 0 / 10%)`,
-                backgroundColor: "#fff",
-            }}>4.7</strong>  </div>
-             <div className="col-11"><h2>{cakedetail.name} </h2>  </div>
+           <div className="col-2"> <strong className="reviewPoint">4.7</strong>  </div>
+             <div className="col-11"><h2>{cakedetail?.name} </h2>  </div>
            </div>
-           
-            <center>
-           
-            </center> 
             <br/>      
             <div className="row  mt-2">
-           <div className="col-3"><b>PRICE:</b></div><div className="col-9">{cakedetail.price}/- Rs Only </div>  
+           <div className="col-3"><b>PRICE:</b></div><div className="col-9">{cakedetail?.price}/- Rs Only </div>  
            </div><div className="row  mt-2">
            <div className="col-3"><b>INGRIDIENTS:</b></div><div className="col-9">Cake,Cream,Choco Chips </div>  
            </div><div className="row  mt-2">
-           <div className="col-3"><b>DESCRIPTIONS:</b></div><div className="col-9">{cakedetail.description} </div>  
+           <div className="col-3"><b>DESCRIPTIONS:</b></div><div className="col-9">{cakedetail?.description} </div>  
            </div>
            <div className="row mt-5">
            <div className="col-3">    </div>
@@ -120,14 +102,13 @@ function Cakedetails(props) {
             </div>
          </div>
 	      </div>
-      </div>
-      )
-  );
+      </div>) }
+    </main>
+  )
 }
 
-export default  connect(function(state,props){
+export default  connect(function(state){
   return {
     user :state?.user?.name,
-    loginstatus:state?.isloggedin
   }
 })(Cakedetails);

@@ -9,7 +9,29 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "./reduxstore/store"
 import { Provider } from "react-redux"
 import dmart from "./reduxstore/store"
+/*import axios from "axios"
 
+
+axios.interceptors.request.use((config)=>{
+  alert('in axios interceptor')
+  var token = localStorage.token
+  if(token){
+    config.headers['authtoken'] = token
+  }
+  return config
+},(error)=>{
+  alert('in axios error')
+  Promise.reject(error)
+})
+
+axios.interceptors.response.use((response)=>{
+  // do anything with response
+  return response
+},(error)=>{
+  alert('in axios error')
+  Promise.reject(error)
+})
+*/
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={dmart} >

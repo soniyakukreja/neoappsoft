@@ -1,19 +1,16 @@
 import {connect} from "react-redux"
-import {Link,withRouter } from "react-router-dom"
+import {Link} from "react-router-dom"
 
-import Cake from './Cake'
 import axios from "axios"
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from "react";
+const api_base  = process.env.REACT_APP_BASE_URL
 
 function Cart(props){
-   // console.log('cart props',props)
-   //var [cartDetails, setcartDetails]=useState()
     
     var removefromCart = function(cakeid, array_index){
-        //console.log('cakeid')
         axios({
-            url:"https://apibyashu.herokuapp.com/api/removecakefromcart",
+            url:api_base+"removecakefromcart",
             method:"post",
             data: {cakeid: cakeid},
             headers : {
@@ -23,7 +20,8 @@ function Cart(props){
             if(response.data){
                 props.dispatch({
                     type:"REMOVE_CART_DATA",
-                    payload :cakeid
+                    payload :cakeid,
+                    array_index:array_index
                 })
                //setcartDetails(response.data.data)
                alert(response.data.message)
@@ -38,8 +36,8 @@ function Cart(props){
     var Count = 0
     // /addcaketocart
     return(
-        <>
-            <div className="row">
+        <main className="Site-content Site-content--full">
+        <div className="row">
                 {props.cartDetails?.length >0  ? 
                 <>
                     <div className="col-8">
@@ -80,14 +78,14 @@ function Cart(props){
                         <div className="col-sm-6"><u>Total Price</u><br/>{TotalPrice}</div>
 
                     </div>
-                    <div className="row m-3 p-3 float-right"><Link to="/checkout"><button className="btn btn-success my-2 my-sm-0"> Checkout</button></Link></div>
+                    <div className="row m-3 p-3 float-right"><Link to="/checkout"><button className="themebtn"> Checkout</button></Link></div>
                 </div>
                 </>
                 :
                 <div className="alert alert-danger m-3 text-center col-12"><center>CART is empty</center></div>
                 }
             </div>
-        </>
+        </main>
     )
 }
 

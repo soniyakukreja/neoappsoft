@@ -1,5 +1,7 @@
 import axios from "axios"
 import {useEffect, useState} from "react"
+import Moment from 'moment';
+const api_base  = process.env.REACT_APP_BASE_URL
 
 function Myorders(){
 
@@ -7,7 +9,7 @@ function Myorders(){
     var i =0;
     useEffect(()=>{
         axios({
-            url: 'https://apibyashu.herokuapp.com/api/cakeorders',
+            url: api_base+'cakeorders',
             method: "post",
             headers: {
             authtoken:  localStorage.token
@@ -45,17 +47,17 @@ i++;
             
             <tr id={index}>
                 <td>{i}</td>
-                <td>{each.orderdate}</td>
+                <td>{ Moment(each.orderdate).format('YYYY-MM-DD') }</td>
                 <td>{(each.pending)?'Pending':'Completed'}</td>
                 <td>{each.mode}</td>
                 <td>{each.price}</td>
                 <td>{
                     //var prod = each.cakes
-                    each.cakes.map((p,index) => {
+                    each.cakes.map((p,indexx) => {
                         return(
                         <>
-                        <img src={p.image} className=""  alt="..." style={{height:"40px", width:"40px"}}  />
-                       <br/>
+                        <img src={p.image} id={indexx} className="ml-2 mr-2"  alt="..." style={{height:"40px", width:"40px"}}  />
+                       
                         </>
                         )
                     })
