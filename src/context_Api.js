@@ -1,4 +1,3 @@
-import { Link} from "react-router-dom"
 import { useContext } from "react"
 import HOC,{ DiscountContext } from './HOC'
 
@@ -9,7 +8,7 @@ function Context_com(props) {
   return (
     <div className="card" style={{width: "18rem", cursor:"pointer",marginLeft:"3px",marginRight:"3px",marginBottom:"3px",marginTop:"3px"}}>
     	
-    	<h5 className="card-title text-center "><b>This component uses parents prop that is context </b></h5>
+    	<h5 className="card-title text-center "><b>This component uses parents prop that is context {parentprop}</b></h5>
     </div>	
   );
 }

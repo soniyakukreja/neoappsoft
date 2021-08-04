@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect } from 'react';
 import Cake from './Cake'
-import cakesfromdatafile from '../data.js'
-import axios from "axios"
+// import cakesfromdatafile from '../data.js'
+// import axios from "axios"
 import Carousel from "./Carousel"
 import Spinner from "../UI/Spinner";
 import { connect } from 'react-redux'

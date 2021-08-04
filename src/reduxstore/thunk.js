@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ToastContainer, toast } from 'react-toastify';    
+import { toast } from 'react-toastify';    
 import 'react-toastify/dist/ReactToastify.css';  
 const api_base  = process.env.REACT_APP_BASE_URL
 
@@ -38,7 +38,7 @@ export const signupThunk = (data) => {
             data: data
         }).then((response) => {
             const str1= "User Already Exists"
-            if(str1.localeCompare(response.data.message)==0){
+            if(str1.localeCompare(response.data.message)===0){
                 toast.error(response.data.message)
             }else{
                 document.getElementById("signupform").reset()
@@ -52,15 +52,13 @@ export const signupThunk = (data) => {
     }
 }
 
-export function abc() {
-    return (dispatch, getState) => {
-        console.log('abc thunk  ')
+// export function abc() {
+//     return (dispatch, getState) => {
+//         //Kuch check krne ke baad
+//         var state = getState()
+//         dispatch({
+//             type: "HELLO"
 
-        //Kuch check krne ke baad
-        var state = getState()
-        dispatch({
-            type: "HELLO"
-
-        })
-    }
-}
+//         })
+//     }
+// }

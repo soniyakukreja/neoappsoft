@@ -1,11 +1,8 @@
-import {useState,useEffect} from "react"
-//import axios from "axios"
+import {useState} from "react"
 import {connect} from "react-redux"
-import { ForgotPassThunk,abc } from "../reduxstore/thunk";
+import { ForgotPassThunk } from "../reduxstore/thunk";
 
 var ForgotPass = function(props){
-    console.log('props',props)
-
     var uemail = '';
     var [formErrors,setfErrors] = useState()
 
@@ -16,10 +13,10 @@ var ForgotPass = function(props){
     var validate = ()=>{
         var reg = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;		
 
-        if ( uemail.trim() == '' ){
+        if ( uemail.trim() === '' ){
             setfErrors("Email is required")
             isValid= false
-        }else if(reg.test(uemail) == false){
+        }else if(reg.test(uemail) === false){
             setfErrors("Provide a valid Email Address")
             isValid= false
         }else{

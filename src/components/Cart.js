@@ -1,13 +1,13 @@
 import {connect} from "react-redux"
 import {Link} from "react-router-dom"
-
 import axios from "axios"
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect } from "react";
+// import { faTrash } from '@fortawesome/free-solid-svg-icons'
+// import { useState, useEffect } from "react";
 const api_base  = process.env.REACT_APP_BASE_URL
 
 function Cart(props){
     
+    console.log('cart page',props.cartDetails)
     var removefromCart = function(cakeid, array_index){
         axios({
             url:api_base+"removecakefromcart",

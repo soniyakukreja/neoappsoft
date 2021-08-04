@@ -49,7 +49,7 @@
     position: relative;
 }
 .themecolor{
-    background-color:#043d76;
+    background-color:#043d76 !important;
 }
 
 .footer a {
@@ -57,13 +57,34 @@
     cursor: pointer;
     font-weight: bold;
     padding: 5px;
+    color: white;
+    text-transform: uppercase;
 }
 
-.footer {
+.footer a:hover {
+    text-decoration: none !important;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px;
+    color: white;
+    text-transform: uppercase;
+}
+
+/* .footer {
     bottom: 0;
     width: 100%;
     right: 0;
     left: 0;
     position: absolute;
     font-size: small;
+} */
+.footer {
+    margin-top: auto;
+    padding: 40px 15px;
+    -webkit-box-align: start;
+    -webkit-align-items: flex-start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    font-size: small;
+    text-align: left;
 }

@@ -1,9 +1,9 @@
-import { Link, withRouter } from "react-router-dom";
-import { useEffect, useState } from "react"
+import { Link } from "react-router-dom";
+import { useState } from "react"
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import { ToastContainer, toast } from 'react-toastify';
+import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Navbar(props) {
@@ -62,7 +62,6 @@ function Navbar(props) {
     </header>
   );
 }
-Navbar = withRouter(Navbar);
 export default connect(function (state, props) {
   return {
     //?. this checks  if exists then

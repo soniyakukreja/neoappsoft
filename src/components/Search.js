@@ -16,9 +16,10 @@ function Search(props)
        let [cakesearch,setCakes]=useState([])
   
         //using query string 
-        let apisearchurl= baseurl+"searchcakes?q="+parsed.q
 
         useEffect(() => {
+            let apisearchurl= baseurl+"searchcakes?q="+parsed.q
+
             setLoading(true);
             axios({
                 url:apisearchurl,

@@ -1,15 +1,15 @@
 import { connect } from "react-redux"
-import { useRouteMatch, Link, withRouter } from "react-router-dom"
+import { useRouteMatch } from "react-router-dom"
 import { useState, useEffect } from "react";
 
 function CartSummary(props) {
 
-    var [current_check_step, setCurrentCheckStep] = useState(1)
-    var [check_stage, setCheck_stage] = useState(1)
+    // var [current_check_step, setCurrentCheckStep] = useState(1)
+    // var [check_stage, setCheck_stage] = useState(1)
 
     var route = useRouteMatch()
-    var url = route.url
-    var path = route.path
+    // var url = route.url
+    // var path = route.path
     var TotalPrice = 0
     var Count = 0
 

@@ -6,7 +6,6 @@ export default function HOC(Hoc){
     return class extends Component{
         render(){
             return (
-                <>
                 <DiscountContext.Provider value="discountchahiye-gareeb-log" >
                     <p>My High Order Component
                     Inside this component we accept other components data
@@ -14,8 +13,6 @@ export default function HOC(Hoc){
                     <br/><br/>
                     <Hoc></Hoc>
                     </DiscountContext.Provider>
-                </>
-
             );
         }
     } 
